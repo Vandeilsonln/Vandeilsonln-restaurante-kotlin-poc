@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+    database.postgres:
+        container_name: database.postgres
+        image: postgres:alpine3.15
+        restart: always
+        environment:
+            POSTGRES_USER: ${JDBC_DATABASE_USERNAME}
+            POSTGRES_PASSWORD: ${JDBC_DATABASE_PASSWORD}
+            POSTGRES_DB: ${DATABASE_NAME}
+        ports:
+            - "5432:5432"
