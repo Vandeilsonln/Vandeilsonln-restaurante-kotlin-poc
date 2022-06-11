@@ -3,6 +3,8 @@ package com.example.restaurante.service
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.AccessControlList
 import com.amazonaws.services.s3.model.CannedAccessControlList
+import com.example.restaurante.model.converters.RestauranteConverter
+import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.repository.RestaurantRepository
 import org.springframework.beans.factory.annotation.Value
@@ -17,10 +19,13 @@ import java.util.*
 class AwsService(
     val aws: AmazonS3,
     @Value("\${aws.bucket.name}") val bucketName: String,
-    val repository: RestaurantRepository) {
+    val repository: RestaurantRepository,
+    val converter: RestauranteConverter
+) {
 
-    fun getRestaurantData(id: String): String {
-        return aws.getUrl(bucketName, id).toString()
+    fun getRestaurantData(id: Long): RestaurantDto {
+        var restaurant = repository.findById(id).orElseThrow{RuntimeException("Not Found")}
+        return converter.entityToDto(restaurant)
     }
 
     fun findAllRestaurants(): Array<RestaurantEntity> {

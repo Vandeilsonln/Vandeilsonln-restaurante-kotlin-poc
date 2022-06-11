@@ -1,5 +1,6 @@
 package com.example.restaurante.controller
 
+import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.service.AwsService
 import org.springframework.http.ResponseEntity
@@ -20,8 +21,8 @@ class RestaurantController(val service : AwsService) {
     }
 
     @GetMapping("/{id}")
-    fun getRestaurant(@PathVariable id: String): String {
-        return service.getRestaurantData(id)
+    fun getRestaurant(@PathVariable id: Long): ResponseEntity<RestaurantDto> {
+        return ResponseEntity.ok(service.getRestaurantData(id))
     }
 
     @PostMapping
