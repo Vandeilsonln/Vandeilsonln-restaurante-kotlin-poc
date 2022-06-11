@@ -33,6 +33,9 @@ class RestaurantEntity(
     val entrega: Int = 0,
 
     @field:Column(nullable = false)
-    val distancia: Double
+    val distancia: Double,
+
+    @field:Column()
+    val imagem: String = ""
 ) {
 }

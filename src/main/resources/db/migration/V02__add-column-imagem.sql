@@ -1,0 +1,1 @@
+ALTER TABLE restaurantes ADD COLUMN imagem varchar(128);
