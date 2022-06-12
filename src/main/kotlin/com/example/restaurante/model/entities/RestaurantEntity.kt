@@ -17,25 +17,25 @@ class RestaurantEntity(
 
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    var id: Long? = null,
 
     @field:Column(nullable = false)
-    val name: String,
+    var name: String,
 
     @field:Column(nullable = false)
     @field:Enumerated(EnumType.STRING)
-    val tipo: TypeEnum,
+    var tipo: TypeEnum,
 
     @field:Column(nullable = false, scale = 2, precision = 10)
-    val frete: BigDecimal,
+    var frete: BigDecimal,
 
     @field:Column(nullable = false)
-    val entrega: Int = 0,
+    var entrega: Int = 0,
 
     @field:Column(nullable = false)
-    val distancia: Double,
+    var distancia: Double,
 
     @field:Column()
-    val imagem: String = ""
+    var imagem: String = ""
 ) {
 }

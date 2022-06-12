@@ -16,4 +16,14 @@ class RestauranteConverter {
             distancia = entity.distancia,
             imagem = entity.imagem)
     }
+
+    fun dtoToEntity (dto: RestaurantDto): RestaurantEntity {
+        return RestaurantEntity(
+            name = dto.name,
+            tipo = dto.tipo,
+            frete = dto.frete,
+            entrega = dto.entrega,
+            distancia = dto.distancia,
+            imagem = dto.imagem!!)
+    }
 }

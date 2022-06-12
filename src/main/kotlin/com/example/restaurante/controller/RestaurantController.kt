@@ -3,14 +3,12 @@ package com.example.restaurante.controller
 import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.service.AwsService
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+
 
 @RestController
 @RequestMapping("v1/restaurantes")
@@ -25,8 +23,8 @@ class RestaurantController(val service : AwsService) {
         return ResponseEntity.ok(service.getRestaurantData(id))
     }
 
-    @PostMapping
-    fun registerNewRestaurant(@RequestParam("logo") data: MultipartFile): Unit {
-        return service.register(data)
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun registerNewRestaurant(@RequestPart("logo") logo: MultipartFile, @RequestPart("restaurantData") restaurantData: String): ResponseEntity<RestaurantEntity> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.registerNewRestaurant(restaurantData = restaurantData, logo = logo))
     }
 }

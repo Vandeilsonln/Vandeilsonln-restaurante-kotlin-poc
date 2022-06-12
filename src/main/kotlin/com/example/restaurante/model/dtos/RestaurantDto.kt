@@ -4,10 +4,10 @@ import com.example.restaurante.model.enums.TypeEnum
 import java.math.BigDecimal
 
 data class RestaurantDto(
-    val name: String,
-    val tipo: TypeEnum,
-    val frete: BigDecimal,
-    val entrega: Int = 0,
-    val distancia: Double,
-    val imagem: String = ""
+    var name: String,
+    var tipo: TypeEnum,
+    var frete: BigDecimal,
+    var entrega: Int = 0,
+    var distancia: Double,
+    var imagem: String? = null
 )
