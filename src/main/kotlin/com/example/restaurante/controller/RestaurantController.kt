@@ -2,7 +2,7 @@ package com.example.restaurante.controller
 
 import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
-import com.example.restaurante.service.AwsService
+import com.example.restaurante.service.RestaurantService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("v1/restaurantes")
-class RestaurantController(val service : AwsService) {
+class RestaurantController(val service : RestaurantService) {
     @GetMapping
     fun getAllRestaurants(): ResponseEntity<Array<RestaurantEntity>> {
         return ResponseEntity.ok(service.findAllRestaurants())
