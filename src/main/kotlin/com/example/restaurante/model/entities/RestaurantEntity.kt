@@ -9,6 +9,7 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.SequenceGenerator
 import javax.persistence.Table
 
 @Entity
@@ -16,7 +17,8 @@ import javax.persistence.Table
 class RestaurantEntity(
 
     @field:Id
-    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
+    @field:SequenceGenerator(name="pk_sequence", sequenceName = "restaurantes_id_seq", allocationSize = 1, initialValue = 100)
+    @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     var id: Long? = null,
 
     @field:Column(nullable = false)
