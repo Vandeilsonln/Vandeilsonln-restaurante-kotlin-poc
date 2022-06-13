@@ -32,16 +32,30 @@ class AwsService(
     }
 
     fun registerNewRestaurant(restaurantData: String, logo: MultipartFile): RestaurantEntity {
-        val mapper = jacksonObjectMapper()
-        var restaurantDto: RestaurantDto = mapper.readValue(restaurantData)
-
-        val file = File(logo.originalFilename!!)
-        FileOutputStream(file).use { outputStream -> outputStream.write(logo.bytes) }
-        aws.putObject(bucketName, "${restaurantDto.name}.jpg", file)
-        aws.setObjectAcl(bucketName, "${restaurantDto.name}.jpg", CannedAccessControlList.PublicRead)
-        val url: String = aws.getUrl(bucketName, "${restaurantDto.name}.jpg",).toString()
-
-        restaurantDto.imagem = url
+        val restaurantDto: RestaurantDto = convertJsonToRestaurantDto(restaurantData)
+        sendLogoToAws(logo, restaurantDto)
+        restaurantDto.imagem = aws.getUrl(bucketName, restaurantDto.name).toString()
         return repository.save(converter.dtoToEntity(restaurantDto))
+    }
+
+    fun convertJsonToRestaurantDto(restaurantJson: String): RestaurantDto {
+        val mapper = jacksonObjectMapper()
+        return mapper.readValue(restaurantJson)
+    }
+
+    private fun sendLogoToAws(logo: MultipartFile, restaurantDto: RestaurantDto) {
+        val file = buildFile(logo)
+        aws.putObject(bucketName, restaurantDto.name, file)
+        makeFilePublic(restaurantDto)
+    }
+
+    fun buildFile(logo: MultipartFile): File {
+        val file = File(logo.originalFilename!!)
+        FileOutputStream(file).use { outputStream -> outputStream.write(logo.bytes)}
+        return file
+        }
+
+    private fun makeFilePublic(restaurantDto: RestaurantDto) {
+        aws.setObjectAcl(bucketName, restaurantDto.name, CannedAccessControlList.PublicRead)
     }
 }
