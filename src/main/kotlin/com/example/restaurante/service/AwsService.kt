@@ -16,6 +16,7 @@ class AwsService (val aws: AmazonS3,
     fun sendLogoToAws(logo: MultipartFile, restaurantDto: RestaurantDto) {
         val file = buildFile(logo)
         aws.putObject(bucketName, restaurantDto.name, file)
+        file.delete()
         makeFilePublic(restaurantDto)
     }
 
