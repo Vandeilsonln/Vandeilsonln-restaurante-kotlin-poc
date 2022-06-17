@@ -36,10 +36,17 @@
 
 - POST ````https://restaurant-kotlin.herokuapp.com/v1/restaurantes````:
 ##### Create a new restaurant
+##### I'm also providing a functional example curl for this endpoint
+````` curl
+curl --location --request POST '127.0.0.1:8080/v1/restaurantes' \
+--form 'logo=@"/Users/vandeilson.nobre/Desktop/Screen Shot 2022-06-09 at 14.53.35.png"' \
+--form 'restaurantData="{\"name\": \"teste\",\"tipo\": \"FASTFOOD\",\"frete\": 10.0,\"entrega\": 23,\"distancia\": 0.5}"'
+`````
 <hr>
 
-## "Create new restaurant" Sequence diagram
+## "Create new restauran" Sequence diagram
 #### Since this is the main challenge of the API, I'm providing a simplified sequence diagram to illustrate the exact workflow.
 ![](./docimages/sequence.png)
 
 ## Postman Collection with Envs (local and prod)
+##### You can download and import the postman collection and environment variables available in the `````./postman````` project directory.
