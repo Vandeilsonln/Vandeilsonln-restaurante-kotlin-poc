@@ -1,19 +1,17 @@
 package com.example.restaurante.service
 
 import com.example.restaurante.model.converters.RestauranteConverter
+import com.example.restaurante.model.dtos.RegisterRestaurantRequestDto
 import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.repository.RestaurantRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
 
 @Service
 class RestaurantService(
-    val awsService: AwsService,
-    @Value("\${aws.bucket.name}") val bucketName: String,
+    val fileStorageService: FileStorageService,
     val repository: RestaurantRepository,
     val converter: RestauranteConverter
 ) {
@@ -27,10 +25,10 @@ class RestaurantService(
         return repository.findAll().toTypedArray()
     }
 
-    fun registerNewRestaurant(restaurantData: String, logo: MultipartFile): RestaurantEntity {
-        val restaurantDto: RestaurantDto = convertJsonToRestaurantDto(restaurantData)
-        awsService.sendLogoToAws(logo, restaurantDto)
-        restaurantDto.imagem = awsService.getObjectUrl(bucketName, restaurantDto.name)
+    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantEntity {
+        val restaurantDto: RestaurantDto = convertJsonToRestaurantDto(registerRestaurantRequestDto.restaurantDataJson)
+        fileStorageService.storeFile(registerRestaurantRequestDto.multiPartLogo, restaurantDto.name)
+        restaurantDto.imagem = fileStorageService.getImageUrl(restaurantDto.name)
         return repository.save(converter.dtoToEntity(restaurantDto))
     }
 
