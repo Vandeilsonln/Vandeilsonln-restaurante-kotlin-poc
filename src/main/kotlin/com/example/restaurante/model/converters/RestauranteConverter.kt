@@ -2,6 +2,8 @@ package com.example.restaurante.model.converters
 
 import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,5 +27,10 @@ class RestauranteConverter {
             entrega = dto.entrega,
             distancia = dto.distancia,
             imagem = dto.imagem!!)
+    }
+
+    fun jsonToDto(restaurantJson: String): RestaurantDto {
+        val mapper = jacksonObjectMapper()
+        return mapper.readValue(restaurantJson)
     }
 }
