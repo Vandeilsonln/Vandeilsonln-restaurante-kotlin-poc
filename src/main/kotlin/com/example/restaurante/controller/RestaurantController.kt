@@ -23,7 +23,7 @@ class RestaurantController(val service : RestaurantService) {
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): ResponseEntity<RestaurantEntity> {
+    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): ResponseEntity<RestaurantEntity> { // Retornar restaurantDTO
         return ResponseEntity.status(HttpStatus.CREATED).body(service.registerNewRestaurant(registerRestaurantRequestDto))
     }
 }

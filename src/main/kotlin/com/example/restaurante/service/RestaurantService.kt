@@ -1,5 +1,6 @@
 package com.example.restaurante.service
 
+import com.example.restaurante.exceptions.handler.RestaurantNotFoundException
 import com.example.restaurante.model.RestaurantLogo
 import com.example.restaurante.model.converters.RestauranteConverter
 import com.example.restaurante.model.dtos.RegisterRestaurantRequestDto
@@ -16,7 +17,7 @@ class RestaurantService(
 ) {
 
     fun getRestaurantData(id: Long): RestaurantDto {
-        val restaurant = repository.findById(id).orElseThrow{RuntimeException("Not Found")}
+        val restaurant = repository.findById(id).orElseThrow{RestaurantNotFoundException("Not Found")}
         return converter.entityToDto(restaurant)
     }
 
@@ -24,7 +25,7 @@ class RestaurantService(
         return repository.findAll().toTypedArray()
     }
 
-    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantEntity {
+    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantEntity { // RestaurantDTO
         val restaurantDto: RestaurantDto = converter.jsonToDto(registerRestaurantRequestDto.restaurantData)
         fileStorageService.storeFile(RestaurantLogo(registerRestaurantRequestDto.logo, restaurantDto.name))
         restaurantDto.imagem = fileStorageService.getImageUrl(restaurantDto.name)
