@@ -14,8 +14,15 @@ import java.lang.Exception
 class ApiExceptionHandler: ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(RestaurantNotFoundException::class)
-    fun handleAnyException(ex: RestaurantNotFoundException, webRequest: WebRequest): ResponseEntity<Any> {
-        return handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.NOT_FOUND, webRequest)
+    fun handleNotFoundException(ex: RestaurantNotFoundException, webRequest: WebRequest): ResponseEntity<Any> {
+        val status = HttpStatus.NOT_FOUND
+        val body = ErrorMessageModel(
+            status = status.value(),
+            type = "entity-not-found",
+            title = "Restaurant not found",
+            detail = ex.message
+        )
+        return handleExceptionInternal(ex, body, HttpHeaders(), status, webRequest)
     }
 
     override fun handleExceptionInternal(
@@ -25,8 +32,12 @@ class ApiExceptionHandler: ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
-        val message = body ?: ex.message
-        val errorModelBody = ErrorMessageModel(message as String?)
-        return super.handleExceptionInternal(ex, ErrorMessageModel(message as String?), headers, status, request)
+
+        val errorBody: ErrorMessageModel = if (body == null) {
+            ErrorMessageModel(status = status.value(), detail = ex.message as String)
+        } else {
+            body as ErrorMessageModel
+        }
+        return super.handleExceptionInternal(ex, errorBody, headers, status, request)
     }
 }

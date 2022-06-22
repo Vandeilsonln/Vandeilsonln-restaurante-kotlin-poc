@@ -1,5 +1,11 @@
 package com.example.restaurante.exceptions.handler
 
-import java.time.LocalDateTime
+import com.fasterxml.jackson.annotation.JsonInclude
 
-data class ErrorMessageModel (var message: String?, val timestamp: String = LocalDateTime.now().toString())
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class ErrorMessageModel(
+    var status: Int,
+    var type: String? = null,
+    var title: String? = null,
+    var detail: String?
+)
