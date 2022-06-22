@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("v1/restaurantes")
 class RestaurantController(val service : RestaurantService) {
     @GetMapping
-    fun getAllRestaurants(): ResponseEntity<Array<RestaurantEntity>> {
+    fun getAllRestaurants(): ResponseEntity<List<RestaurantDto>> {
         return ResponseEntity.ok(service.findAllRestaurants())
     }
 
@@ -23,7 +23,7 @@ class RestaurantController(val service : RestaurantService) {
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): ResponseEntity<RestaurantEntity> { // Retornar restaurantDTO
+    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): ResponseEntity<RestaurantDto> { // Retornar restaurantDTO
         return ResponseEntity.status(HttpStatus.CREATED).body(service.registerNewRestaurant(registerRestaurantRequestDto))
     }
 }

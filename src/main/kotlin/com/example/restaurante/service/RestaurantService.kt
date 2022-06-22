@@ -8,6 +8,7 @@ import com.example.restaurante.model.dtos.RestaurantDto
 import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.repository.RestaurantRepository
 import org.springframework.stereotype.Service
+import kotlin.streams.toList
 
 @Service
 class RestaurantService(
@@ -21,15 +22,18 @@ class RestaurantService(
         return converter.entityToDto(restaurant)
     }
 
-    fun findAllRestaurants(): Array<RestaurantEntity> {
-        return repository.findAll().toTypedArray()
+    fun findAllRestaurants(): List<RestaurantDto> {
+        return repository.findAll().stream()
+            .map { i -> converter.entityToDto(i) }
+            .toList()
     }
 
-    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantEntity { // RestaurantDTO
+    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantDto {
         val restaurantDto: RestaurantDto = converter.jsonToDto(registerRestaurantRequestDto.restaurantData)
         fileStorageService.storeFile(RestaurantLogo(registerRestaurantRequestDto.logo, restaurantDto.name))
         restaurantDto.imagem = fileStorageService.getImageUrl(restaurantDto.name)
-        return repository.save(converter.dtoToEntity(restaurantDto))
+        val savedRestaurantEntity = repository.save(converter.dtoToEntity(restaurantDto))
+        return converter.entityToDto(savedRestaurantEntity)
     }
 
 }
