@@ -1,6 +1,6 @@
 package com.example.restaurante.service
 
-import com.example.restaurante.exceptions.handler.RestaurantNotFoundException
+import com.example.restaurante.exceptions.RestaurantNotFoundException
 import com.example.restaurante.model.RestaurantLogo
 import com.example.restaurante.model.converters.RestauranteConverter
 import com.example.restaurante.model.dtos.RegisterRestaurantRequestDto
@@ -17,7 +17,7 @@ class RestaurantService(
 ) {
 
     fun getRestaurantData(id: Long): RestaurantDto {
-        val restaurant = repository.findById(id).orElseThrow{RestaurantNotFoundException("Not Found")}
+        val restaurant = repository.findById(id).orElseThrow{ RestaurantNotFoundException("Restaurant with id $id not found") }
         return converter.entityToDto(restaurant)
     }
 

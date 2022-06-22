@@ -1,3 +1,5 @@
 package com.example.restaurante.exceptions.handler
 
-data class ErrorMessageModel (var message: String?)
+import java.time.LocalDateTime
+
+data class ErrorMessageModel (var message: String?, val timestamp: String = LocalDateTime.now().toString())
