@@ -2,7 +2,6 @@ package com.example.restaurante.service.implementation
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
-import com.example.restaurante.model.RestaurantLogo
 import com.example.restaurante.service.FileStorageService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
@@ -16,11 +15,11 @@ import java.io.FileOutputStream
 class S3FileStorageServiceImpl (val aws: AmazonS3,
                                 @Value("\${aws.bucket.name}") val bucketName: String): FileStorageService {
 
-    override fun storeFile(restaurantLogo: RestaurantLogo) {
-        val logoFile = buildFile(restaurantLogo.logoData)
-        aws.putObject(bucketName, restaurantLogo.logoName, logoFile)
+    override fun storeFile(restaurantLogo: MultipartFile, restaurantName: String) {
+        val logoFile = buildFile(restaurantLogo)
+        aws.putObject(bucketName, restaurantName, logoFile)
         logoFile.delete()
-        makeFilePublic(restaurantLogo.logoName)
+        makeFilePublic(restaurantName)
     }
 
     private fun buildFile(logo: MultipartFile): File {

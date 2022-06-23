@@ -1,9 +1,9 @@
 package com.example.restaurante.service
 
-import com.example.restaurante.model.RestaurantLogo
+import org.springframework.web.multipart.MultipartFile
 
 interface FileStorageService {
 
-    fun storeFile(multiPartLogo: RestaurantLogo)
+    fun storeFile(restaurantLogo: MultipartFile, restaurantName: String)
     fun getImageUrl(restaurantName: String): String
 }

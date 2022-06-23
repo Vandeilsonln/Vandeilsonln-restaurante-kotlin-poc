@@ -1,13 +1,11 @@
 package com.example.restaurante.service
 
 import com.example.restaurante.exceptions.RestaurantNotFoundException
-import com.example.restaurante.model.RestaurantLogo
 import com.example.restaurante.model.converters.RestauranteConverter
-import com.example.restaurante.model.dtos.RegisterRestaurantRequestDto
 import com.example.restaurante.model.dtos.RestaurantDto
-import com.example.restaurante.model.entities.RestaurantEntity
 import com.example.restaurante.repository.RestaurantRepository
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import kotlin.streams.toList
 
 @Service
@@ -17,7 +15,7 @@ class RestaurantService(
     val converter: RestauranteConverter
 ) {
 
-    fun getRestaurantData(id: Long): RestaurantDto {
+    fun getRestaurant(id: Long): RestaurantDto {
         val restaurant = repository.findById(id).orElseThrow{ RestaurantNotFoundException("Restaurant with id $id not found") }
         return converter.entityToDto(restaurant)
     }
@@ -28,12 +26,14 @@ class RestaurantService(
             .toList()
     }
 
-    fun registerNewRestaurant(registerRestaurantRequestDto: RegisterRestaurantRequestDto): RestaurantDto {
-        val restaurantDto: RestaurantDto = converter.jsonToDto(registerRestaurantRequestDto.restaurantData)
-        fileStorageService.storeFile(RestaurantLogo(registerRestaurantRequestDto.logo, restaurantDto.name))
-        restaurantDto.imagem = fileStorageService.getImageUrl(restaurantDto.name)
+    fun registerNewRestaurant(restaurantDto: RestaurantDto): RestaurantDto {
         val savedRestaurantEntity = repository.save(converter.dtoToEntity(restaurantDto))
         return converter.entityToDto(savedRestaurantEntity)
     }
 
+    fun updateRestaurantLogo(restaurantLogo: MultipartFile, id: Long) {
+        val restaurantEntity = repository.findById(id).get()
+        fileStorageService.storeFile(restaurantLogo, restaurantEntity.name)
+        repository.updateRestaurantLogo(fileStorageService.getImageUrl(restaurantEntity.name), id)
+    }
 }
