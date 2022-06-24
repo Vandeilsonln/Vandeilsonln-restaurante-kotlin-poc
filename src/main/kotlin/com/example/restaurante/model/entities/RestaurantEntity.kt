@@ -21,23 +21,23 @@ class RestaurantEntity(
     @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     var id: Long? = null,
 
-    @field:Column(nullable = false)
+    @field:Column(nullable = false, name = "name")
     var name: String,
 
-    @field:Column(nullable = false)
+    @field:Column(nullable = false, name = "tipo")
     @field:Enumerated(EnumType.STRING)
-    var tipo: TypeEnum,
+    var type: TypeEnum,
 
-    @field:Column(nullable = false, scale = 2, precision = 10)
-    var frete: BigDecimal,
+    @field:Column(nullable = false, scale = 2, precision = 10, name = "frete")
+    var deliveryFee: BigDecimal,
 
-    @field:Column(nullable = false)
-    var entrega: Int = 0,
+    @field:Column(nullable = false, name = "entrega")
+    var deliveryTime: Int = 0,
 
-    @field:Column(nullable = false)
-    var distancia: Double,
+    @field:Column(nullable = false, name = "distancia")
+    var distance: Double,
 
-    @field:Column()
-    var imagem: String = ""
+    @field:Column(name = "imagem")
+    var image: String? = ""
 ) {
 }

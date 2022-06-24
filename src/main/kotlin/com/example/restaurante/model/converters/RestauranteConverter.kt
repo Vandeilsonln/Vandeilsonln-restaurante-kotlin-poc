@@ -1,36 +1,31 @@
 package com.example.restaurante.model.converters
 
-import com.example.restaurante.model.dtos.RestaurantDto
+import com.example.restaurante.model.dtos.request.RestaurantDtoRequest
+import com.example.restaurante.model.dtos.response.RestaurantDtoResponse
 import com.example.restaurante.model.entities.RestaurantEntity
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
 
 @Component
 class RestauranteConverter {
 
-    fun entityToDto (entity: RestaurantEntity): RestaurantDto {
-        return RestaurantDto(
+    fun entityToDto (entity: RestaurantEntity): RestaurantDtoResponse {
+        return RestaurantDtoResponse(
+            id = entity.id!!,
             name = entity.name,
-            tipo = entity.tipo,
-            frete = entity.frete,
-            entrega = entity.entrega,
-            distancia = entity.distancia,
-            imagem = entity.imagem)
+            type = entity.type,
+            deliveryFee = entity.deliveryFee,
+            deliveryTime = entity.deliveryTime,
+            distance = entity.distance,
+            image = entity.image)
     }
 
-    fun dtoToEntity (dto: RestaurantDto): RestaurantEntity {
+    fun dtoToEntity (dto: RestaurantDtoRequest): RestaurantEntity {
         return RestaurantEntity(
             name = dto.name,
-            tipo = dto.tipo,
-            frete = dto.frete,
-            entrega = dto.entrega,
-            distancia = dto.distancia,
-            imagem = dto.imagem!!)
-    }
-
-    fun jsonToDto(restaurantJson: String): RestaurantDto {
-        val mapper = jacksonObjectMapper()
-        return mapper.readValue(restaurantJson)
+            type = dto.type,
+            deliveryFee = dto.deliveryFee,
+            deliveryTime = dto.deliveryTime,
+            distance = dto.distance,
+            image = null)
     }
 }

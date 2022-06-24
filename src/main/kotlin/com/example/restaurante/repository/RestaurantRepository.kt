@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RestaurantRepository : JpaRepository<RestaurantEntity, Long> {
-    fun findAllByTipo(tipo : TypeEnum) : List<RestaurantEntity>
+    fun findAllByType(type : TypeEnum) : List<RestaurantEntity>
 
     @Modifying
-    @Query("UPDATE RestaurantEntity set imagem = :logoUrl WHERE id = :id")
+    @Query("UPDATE RestaurantEntity set image = :logoUrl WHERE id = :id")
     fun updateRestaurantLogo(logoUrl: String, id: Long)
 }
